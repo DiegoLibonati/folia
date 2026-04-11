@@ -1,4 +1,4 @@
-# Notepad Program
+# Notepad
 
 ## Educational Purpose
 
@@ -64,11 +64,7 @@ pyinstaller==6.16.0
 
 ## Portfolio Link
 
-[`https://www.diegolibonati.com.ar/#/project/Notepad-Program`](https://www.diegolibonati.com.ar/#/project/Notepad-Program)
-
-## Video
-
-https://user-images.githubusercontent.com/99032604/199620478-9fc51184-1cc8-45ef-b1cb-24c873a39014.mp4
+[`https://www.diegolibonati.com.ar/#/project/notepad`](https://www.diegolibonati.com.ar/#/project/notepad)
 
 ## Testing
 
