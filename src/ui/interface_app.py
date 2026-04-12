@@ -15,7 +15,7 @@ class InterfaceApp:
         self._styles = styles
         self._config = config
         self._root = root
-        self._root.title("Notepad APP")
+        self._root.title("Folia")
         self._root.geometry("800x800")
         self._root.resizable(False, False)
         self._root.iconbitmap(PATH_ICON)

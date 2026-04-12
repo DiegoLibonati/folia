@@ -1,7 +1,7 @@
 [project]
-name = "notepad"
+name = "folia"
 version = "1.0.0"
-description = "I made a python program with user interface using tkinter. This program works like notepad, you can open text files, create and edit them. In addition you can change the font type and change the font type."
+description = "**Folia** is a lightweight, desktop text editor built with Python and Tkinter, designed to provide a clean and distraction-free writing experience directly on your operating system — no browser, no cloud, no dependencies beyond a Python runtime."
 requires-python = ">=3.11"
 
 [tool.pytest.ini_options]

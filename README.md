@@ -1,4 +1,4 @@
-# Notepad
+# Folia
 
 ## Educational Purpose
 
@@ -24,7 +24,15 @@ The main goal is to explore and demonstrate best practices, patterns, and techno
 
 ## Description
 
-I made a python program with user interface using tkinter. This program works like notepad, you can open text files, create and edit them. In addition you can change the font type and change the font type.
+**Folia** is a lightweight, desktop text editor built with Python and Tkinter, designed to provide a clean and distraction-free writing experience directly on your operating system — no browser, no cloud, no dependencies beyond a Python runtime.
+
+At its core, Folia works like a modern notepad: you can create new text documents from scratch, open existing `.txt` files from your filesystem, edit their content freely, and save them back — either overwriting the original file or saving to a new location. The editor supports standard text operations and gives you a familiar, native-feeling interface that stays out of your way.
+
+Beyond basic editing, Folia lets you personalize the reading and writing experience through its built-in font configuration panel. You can change the font family and adjust the font size to whatever feels most comfortable, making it equally suitable for quick note-taking or longer writing sessions.
+
+The application is architected with a clear separation between UI, services, and configuration, making it easy to understand and extend. It uses a global error handling system that surfaces user-facing issues as dialog messages rather than silent failures or crashes. Environment-based configuration (`development`, `production`, `testing`) allows the app to behave differently depending on the context it runs in, which is particularly useful during development and automated testing.
+
+Folia can also be packaged into a fully standalone executable using PyInstaller, meaning end users can run it without having Python installed at all — just a single binary or `.exe` file.
 
 ## Technologies used
 
@@ -64,7 +72,7 @@ pyinstaller==6.16.0
 
 ## Portfolio Link
 
-[`https://www.diegolibonati.com.ar/#/project/notepad`](https://www.diegolibonati.com.ar/#/project/notepad)
+[`https://www.diegolibonati.com.ar/#/project/folia`](https://www.diegolibonati.com.ar/#/project/folia)
 
 ## Testing
 
