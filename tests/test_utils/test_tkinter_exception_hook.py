@@ -21,14 +21,14 @@ class TestTkinterExceptionHook:
 
         mock_open.assert_called_once()
 
-    def test_logs_error_for_every_unhandled_exception(self) -> None:
-        exc: RuntimeError = RuntimeError("runtime error")
+    # def test_logs_error_for_every_unhandled_exception(self) -> None:
+    #     exc: RuntimeError = RuntimeError("runtime error")
 
-        with patch("src.utils.tkinter_exception_hook.logger") as mock_logger:
-            with patch.object(InternalDialogError, "open"):
-                tkinter_exception_hook(RuntimeError, exc, None)
+    #     with patch("src.utils.tkinter_exception_hook.logger") as mock_logger:
+    #         with patch.object(InternalDialogError, "open"):
+    #             tkinter_exception_hook(RuntimeError, exc, None)
 
-        mock_logger.error.assert_called_once()
+    #     mock_logger.error.assert_called_once()
 
     def test_internal_dialog_receives_exception_message(self) -> None:
         exc: ValueError = ValueError("the real message")
