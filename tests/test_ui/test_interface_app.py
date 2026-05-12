@@ -22,6 +22,19 @@ class TestInterfaceApp:
     def test_is_created_successfully(self, app: InterfaceApp) -> None:
         assert app is not None
 
+    def test_creates_default_styles_when_none_provided(self, root: tk.Tk) -> None:
+        config: DefaultConfig = DefaultConfig()
+        with patch.object(root, "iconbitmap"):
+            app: InterfaceApp = InterfaceApp(root=root, config=config)
+        assert isinstance(app._styles, Styles)
+
+    def test_uses_provided_styles_instance_directly(self, root: tk.Tk) -> None:
+        config: DefaultConfig = DefaultConfig()
+        custom_styles: Styles = Styles()
+        with patch.object(root, "iconbitmap"):
+            app: InterfaceApp = InterfaceApp(root=root, config=config, styles=custom_styles)
+        assert app._styles is custom_styles
+
     def test_save_config_font_raises_when_font_is_empty(self, app: InterfaceApp) -> None:
         with pytest.raises(ValidationDialogError):
             app._save_config_font("", "12")

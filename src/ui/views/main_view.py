@@ -1,4 +1,4 @@
-from tkinter import Frame, Menu, Scrollbar, Text, Tk
+from tkinter import Frame, Menu, Misc, Scrollbar, Text
 
 from src.ui.styles import Styles
 
@@ -6,7 +6,7 @@ from src.ui.styles import Styles
 class MainView(Frame):
     def __init__(
         self,
-        root: Tk,
+        root: Misc,
         styles: Styles,
         on_open: callable,
         on_save: callable,

@@ -65,6 +65,9 @@ With the dependencies listed above in mind, follow these steps to run the projec
 5. Execute: `pip install -r requirements.txt`
 6. Execute: `pip install -r requirements.dev.txt`
 7. Execute: `pip install -r requirements.test.txt`
+
+   Alternatively, if you installed the project as an editable package (`pip install -e ".[dev,test]"`), steps 5–7 can be replaced by that single command.
+
 8. Copy `.env.example.dev` to `.env` so the app can load its environment configuration
 9. Use `python app.py` or `python -m src` to execute the program
 
@@ -107,6 +110,10 @@ Before shipping a build, check your dependencies for known vulnerabilities using
 ## Build
 
 Once tests pass and dependencies are clean, you can generate a standalone executable (`.exe` on Windows, or binary on Linux/Mac) using **PyInstaller**.
+
+> **Important:** The build bundles the repo-level `.env` file into the executable. For production builds,
+> never put real secrets in the repo-level `.env`. Create a separate `.env.prod`, copy it to `.env` right
+> before running PyInstaller, then remove it from the repo root afterwards.
 
 ### Windows
 
