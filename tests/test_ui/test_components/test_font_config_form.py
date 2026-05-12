@@ -1,5 +1,4 @@
 import tkinter as tk
-from typing import Any
 
 import pytest
 
@@ -7,53 +6,52 @@ from src.ui.components.font_config_form import FontConfigForm
 from src.ui.styles import Styles
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
+def styles() -> Styles:
+    return Styles()
+
+
+@pytest.fixture
 def entry_number(root: tk.Tk) -> tk.StringVar:
-    return tk.StringVar()
+    return tk.StringVar(master=root)
 
 
-@pytest.fixture(scope="function")
-def form(root: tk.Tk, entry_number: tk.StringVar) -> FontConfigForm:
-    styles: Styles = Styles()
-    font_families: list[tuple[str, Any]] = [("Arial", None), ("Roboto", None)]
-    return FontConfigForm(parent=root, styles=styles, font_families=font_families, entry_number=entry_number)
+@pytest.fixture
+def font_config_form(root: tk.Tk, styles: Styles, entry_number: tk.StringVar) -> FontConfigForm:
+    form: FontConfigForm = FontConfigForm(
+        parent=root,
+        styles=styles,
+        font_families=["Arial", "Roboto", "Courier"],
+        entry_number=entry_number,
+    )
+    yield form
+    form.destroy()
 
 
 class TestFontConfigForm:
-    def test_is_created_successfully(self, form: FontConfigForm) -> None:
-        assert form is not None
+    def test_is_a_frame(self, font_config_form: FontConfigForm) -> None:
+        assert isinstance(font_config_form, tk.Frame)
 
-    def test_is_frame(self, form: FontConfigForm) -> None:
-        assert isinstance(form, tk.Frame)
+    def test_get_font_returns_empty_string_when_nothing_is_selected(
+        self, font_config_form: FontConfigForm
+    ) -> None:
+        result: str = font_config_form.get_font()
 
-    def test_get_font_returns_empty_by_default(self, form: FontConfigForm) -> None:
-        result: str = form.get_font()
         assert result == ""
 
-    def test_get_font_returns_selected_value(self, root: tk.Tk, entry_number: tk.StringVar) -> None:
-        styles: Styles = Styles()
-        font_families: list[tuple[str, Any]] = [("Arial", None), ("Roboto", None)]
-        f: FontConfigForm = FontConfigForm(parent=root, styles=styles, font_families=font_families, entry_number=entry_number)
-        f._combo_fonts.set("Arial")
-        assert f.get_font() == "Arial"
+    def test_get_font_returns_selected_value(self, font_config_form: FontConfigForm) -> None:
+        font_config_form._combo_fonts.set("Arial")
 
-    def test_get_font_returns_second_option(self, root: tk.Tk, entry_number: tk.StringVar) -> None:
-        styles: Styles = Styles()
-        font_families: list[tuple[str, Any]] = [("Arial", None), ("Roboto", None)]
-        f: FontConfigForm = FontConfigForm(parent=root, styles=styles, font_families=font_families, entry_number=entry_number)
-        f._combo_fonts.set("Roboto")
-        assert f.get_font() == "Roboto"
+        result: str = font_config_form.get_font()
 
-    def test_entry_number_initial_value_is_empty(self, form: FontConfigForm, entry_number: tk.StringVar) -> None:
-        assert entry_number.get() == ""
+        assert result == "Arial"
 
-    def test_entry_number_set_reflects_in_var(self, form: FontConfigForm, entry_number: tk.StringVar) -> None:
-        entry_number.set("14")
-        assert entry_number.get() == "14"
+    def test_stores_provided_font_families(self, font_config_form: FontConfigForm) -> None:
+        assert font_config_form._font_families == ["Arial", "Roboto", "Courier"]
 
-    def test_font_families_accepted_as_list(self, root: tk.Tk, entry_number: tk.StringVar) -> None:
-        styles: Styles = Styles()
-        font_families: list[tuple[str, Any]] = [("Comic Sans", None)]
-        f: FontConfigForm = FontConfigForm(parent=root, styles=styles, font_families=font_families, entry_number=entry_number)
-        f._combo_fonts.set("Comic Sans")
-        assert f.get_font() == "Comic Sans"
+    def test_combo_contains_provided_font_families(self, font_config_form: FontConfigForm) -> None:
+        values: list[str] = list(font_config_form._combo_fonts["values"])
+
+        assert "Arial" in values
+        assert "Roboto" in values
+        assert "Courier" in values

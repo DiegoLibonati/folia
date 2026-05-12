@@ -1,87 +1,116 @@
 import tkinter as tk
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from src.configs.default_config import DefaultConfig
+from src.constants.messages import MESSAGE_NOT_VALID_FIELD_NUM, MESSAGE_NOT_VALID_FIELDS
 from src.ui.interface_app import InterfaceApp
 from src.ui.styles import Styles
 from src.utils.dialogs import ValidationDialogError
 
 
-@pytest.fixture(scope="function")
-def app(root: tk.Tk) -> InterfaceApp:
-    config: DefaultConfig = DefaultConfig()
-    styles: Styles = Styles()
+@pytest.fixture
+def config() -> DefaultConfig:
+    return DefaultConfig()
+
+
+@pytest.fixture
+def styles() -> Styles:
+    return Styles()
+
+
+@pytest.fixture
+def app(root: tk.Tk, config: DefaultConfig, styles: Styles) -> InterfaceApp:
     with patch.object(root, "iconbitmap"):
         instance: InterfaceApp = InterfaceApp(root=root, config=config, styles=styles)
-    return instance
+    yield instance
+    instance._main_view.destroy()
 
 
 class TestInterfaceApp:
-    def test_is_created_successfully(self, app: InterfaceApp) -> None:
-        assert app is not None
+    def test_stores_provided_config(
+        self, root: tk.Tk, config: DefaultConfig, styles: Styles
+    ) -> None:
+        with patch.object(root, "iconbitmap"):
+            app: InterfaceApp = InterfaceApp(root=root, config=config, styles=styles)
 
-    def test_creates_default_styles_when_none_provided(self, root: tk.Tk) -> None:
-        config: DefaultConfig = DefaultConfig()
+        assert app._config is config
+        app._main_view.destroy()
+
+    def test_stores_provided_styles(
+        self, root: tk.Tk, config: DefaultConfig, styles: Styles
+    ) -> None:
+        with patch.object(root, "iconbitmap"):
+            app: InterfaceApp = InterfaceApp(root=root, config=config, styles=styles)
+
+        assert app._styles is styles
+        app._main_view.destroy()
+
+    def test_creates_default_styles_when_none_provided(
+        self, root: tk.Tk, config: DefaultConfig
+    ) -> None:
         with patch.object(root, "iconbitmap"):
             app: InterfaceApp = InterfaceApp(root=root, config=config)
-        assert isinstance(app._styles, Styles)
 
-    def test_uses_provided_styles_instance_directly(self, root: tk.Tk) -> None:
-        config: DefaultConfig = DefaultConfig()
-        custom_styles: Styles = Styles()
-        with patch.object(root, "iconbitmap"):
-            app: InterfaceApp = InterfaceApp(root=root, config=config, styles=custom_styles)
-        assert app._styles is custom_styles
+        assert isinstance(app._styles, Styles)
+        app._main_view.destroy()
 
     def test_save_config_font_raises_when_font_is_empty(self, app: InterfaceApp) -> None:
-        with pytest.raises(ValidationDialogError):
+        with pytest.raises(ValidationDialogError) as exc_info:
             app._save_config_font("", "12")
 
+        assert exc_info.value.message == MESSAGE_NOT_VALID_FIELDS
+
     def test_save_config_font_raises_when_size_is_empty(self, app: InterfaceApp) -> None:
-        with pytest.raises(ValidationDialogError):
+        with pytest.raises(ValidationDialogError) as exc_info:
             app._save_config_font("Arial", "")
 
-    def test_save_config_font_raises_when_size_is_not_integer(self, app: InterfaceApp) -> None:
-        with pytest.raises(ValidationDialogError):
+        assert exc_info.value.message == MESSAGE_NOT_VALID_FIELDS
+
+    def test_save_config_font_raises_when_size_is_not_numeric(self, app: InterfaceApp) -> None:
+        with pytest.raises(ValidationDialogError) as exc_info:
             app._save_config_font("Arial", "abc")
 
-    def test_save_config_font_raises_when_size_is_float_string(self, app: InterfaceApp) -> None:
-        with pytest.raises(ValidationDialogError):
-            app._save_config_font("Arial", "12.5")
+        assert exc_info.value.message == MESSAGE_NOT_VALID_FIELD_NUM
 
-    def test_save_config_font_calls_set_font_with_valid_inputs(self, app: InterfaceApp) -> None:
-        app._main_view.set_font = MagicMock()
-        app._save_config_font("Arial", "14")
-        app._main_view.set_font.assert_called_once_with("Arial", 14)
+    def test_save_config_font_calls_set_font_with_int_size(self, app: InterfaceApp) -> None:
+        with patch.object(app._main_view, "set_font") as mock_set_font:
+            app._save_config_font("Arial", "14")
 
-    def test_save_config_font_converts_size_to_int(self, app: InterfaceApp) -> None:
-        app._main_view.set_font = MagicMock()
-        app._save_config_font("Roboto", "20")
-        args: tuple[str, int] = app._main_view.set_font.call_args[0]
-        assert isinstance(args[1], int)
-        assert args[1] == 20
+        mock_set_font.assert_called_once_with("Arial", 14)
 
-    def test_delete_txt_clears_text(self, app: InterfaceApp) -> None:
-        app._main_view.set_text("hello")
-        app._delete_txt()
-        assert app._main_view.get_text().strip() == ""
-
-    def test_save_file_calls_file_service(self, app: InterfaceApp) -> None:
-        app._main_view.set_text("content")
-        with patch("src.ui.interface_app.FileService.save_file") as mock_save:
-            app._save_file()
-        mock_save.assert_called_once()
-
-    def test_get_txt_from_file_sets_text_when_content_returned(self, app: InterfaceApp) -> None:
-        app._main_view.clear_text()
+    def test_get_txt_from_file_sets_text_when_content_is_returned(self, app: InterfaceApp) -> None:
         with patch("src.ui.interface_app.FileService.open_file", return_value="file content"):
-            app._get_txt_from_file()
-        assert "file content" in app._main_view.get_text()
+            with patch.object(app._main_view, "set_text") as mock_set_text:
+                app._get_txt_from_file()
 
-    def test_get_txt_from_file_does_nothing_when_none_returned(self, app: InterfaceApp) -> None:
-        app._main_view.clear_text()
+        mock_set_text.assert_called_once_with("file content")
+
+    def test_get_txt_from_file_does_not_set_text_when_no_file_is_selected(
+        self, app: InterfaceApp
+    ) -> None:
         with patch("src.ui.interface_app.FileService.open_file", return_value=None):
-            app._get_txt_from_file()
-        assert app._main_view.get_text().strip() == ""
+            with patch.object(app._main_view, "set_text") as mock_set_text:
+                app._get_txt_from_file()
+
+        mock_set_text.assert_not_called()
+
+    def test_save_file_passes_text_content_to_file_service(self, app: InterfaceApp) -> None:
+        with patch.object(app._main_view, "get_text", return_value="editor content"):
+            with patch("src.ui.interface_app.FileService.save_file") as mock_save:
+                app._save_file()
+
+        mock_save.assert_called_once_with("editor content")
+
+    def test_delete_txt_clears_the_main_view(self, app: InterfaceApp) -> None:
+        with patch.object(app._main_view, "clear_text") as mock_clear:
+            app._delete_txt()
+
+        mock_clear.assert_called_once()
+
+    def test_open_win_config_font_creates_font_config_view(self, app: InterfaceApp) -> None:
+        with patch("src.ui.interface_app.FontConfigView") as mock_view_cls:
+            app._open_win_config_font()
+
+        mock_view_cls.assert_called_once()

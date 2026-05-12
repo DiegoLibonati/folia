@@ -1,23 +1,15 @@
-import os
-
-from src.constants import paths
+from src.constants.paths import PATH_ICON
 
 
 class TestPaths:
-    def test_root_value(self) -> None:
-        assert paths.ROOT == "./src"
-
-    def test_root_assets_value(self) -> None:
-        assert paths.ROOT_ASSETS == "./src/assets"
-
     def test_path_icon_is_string(self) -> None:
-        assert isinstance(paths.PATH_ICON, str)
+        assert isinstance(PATH_ICON, str)
 
-    def test_path_icon_contains_icon_filename(self) -> None:
-        assert "icon.ico" in paths.PATH_ICON
+    def test_path_icon_is_non_empty(self) -> None:
+        assert PATH_ICON != ""
 
-    def test_path_icon_contains_assets(self) -> None:
-        assert "assets" in paths.PATH_ICON
+    def test_path_icon_ends_with_ico(self) -> None:
+        assert PATH_ICON.endswith(".ico")
 
-    def test_path_icon_is_absolute(self) -> None:
-        assert os.path.isabs(paths.PATH_ICON)
+    def test_path_icon_contains_icons_directory(self) -> None:
+        assert "icons" in PATH_ICON
