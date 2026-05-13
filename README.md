@@ -51,10 +51,10 @@ pytest-timeout==2.3.1
 pytest-xdist==3.5.0
 ```
 
-#### Build (`requirements.build.txt`)
+#### Build (`requirements.build.txt` → `-e .[build]`)
 
 ```
-pyinstaller==6.16.0
+pyinstaller>=6.0
 ```
 
 ## Getting Started
