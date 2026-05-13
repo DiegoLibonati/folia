@@ -30,7 +30,7 @@ Dependencies are declared in `pyproject.toml`. The `requirements*.txt` files are
 #### Runtime (`requirements.txt` → `-e .`)
 
 ```
-python-dotenv>=1.0
+python-dotenv==1.0.1
 ```
 
 #### Dev (`requirements.dev.txt` → `-e .[dev]`)
@@ -54,7 +54,7 @@ pytest-xdist==3.5.0
 #### Build (`requirements.build.txt` → `-e .[build]`)
 
 ```
-pyinstaller>=6.0
+pyinstaller==6.16.0
 ```
 
 ## Getting Started
