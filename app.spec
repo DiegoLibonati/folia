@@ -5,11 +5,17 @@
 # Recommended: create a separate .env.prod, copy it to .env before running
 # PyInstaller, then delete it from the repo root afterwards.
 
+import os
+
+_datas = [('src/assets', 'src/assets')]
+if os.path.exists('.env'):
+    _datas.append(('.env', '.'))
+
 a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/assets', 'src/assets'), ('.env', '.')],
+    datas=_datas,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
