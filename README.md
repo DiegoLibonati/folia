@@ -25,20 +25,23 @@ Folia can also be packaged into a fully standalone executable using PyInstaller,
 
 ## Libraries used
 
-#### Requirements.txt
+Dependencies are declared in `pyproject.toml`. The `requirements*.txt` files are thin wrappers that delegate to it.
+
+#### Runtime (`requirements.txt` → `-e .`)
 
 ```
-python-dotenv==1.0.1
+python-dotenv>=1.0
 ```
 
-#### Requirements.dev.txt
+#### Dev (`requirements.dev.txt` → `-e .[dev]`)
+
 ```
 pre-commit==4.3.0
 pip-audit==2.7.3
 ruff==0.11.12
 ```
 
-#### Requirements.test.txt
+#### Test (`requirements.test.txt` → `-e .[test]`)
 
 ```
 pytest==8.4.2
@@ -48,7 +51,7 @@ pytest-timeout==2.3.1
 pytest-xdist==3.5.0
 ```
 
-#### Requirements.build.txt
+#### Build (`requirements.build.txt`)
 
 ```
 pyinstaller==6.16.0
@@ -62,14 +65,15 @@ With the dependencies listed above in mind, follow these steps to run the projec
 2. Go to the repository folder and execute: `python -m venv venv`
 3. Execute in Windows: `venv\Scripts\activate`
 4. Execute in Linux/Mac: `source venv/bin/activate`
-5. Execute: `pip install -r requirements.txt`
-6. Execute: `pip install -r requirements.dev.txt`
-7. Execute: `pip install -r requirements.test.txt`
+5. Execute: `pip install -e ".[dev,test]"`
 
-   Alternatively, if you installed the project as an editable package (`pip install -e ".[dev,test]"`), steps 5–7 can be replaced by that single command.
+   Alternatively, you can install each group separately:
+   - `pip install -r requirements.txt` — runtime only
+   - `pip install -r requirements.dev.txt` — adds dev tools
+   - `pip install -r requirements.test.txt` — adds test tools
 
-8. Copy `.env.example.dev` to `.env` so the app can load its environment configuration
-9. Use `python app.py` or `python -m src` to execute the program
+6. Copy `.env.example.dev` to `.env` so the app can load its environment configuration
+7. Use `python app.py` or `python -m src` to execute the program
 
 ### Pre-Commit for Development
 
@@ -94,9 +98,8 @@ With the project running locally, you can verify everything works by executing t
 2. Execute: `python -m venv venv`
 3. Execute in Windows: `venv\Scripts\activate`
 4. Execute in Linux/Mac: `source venv/bin/activate`
-5. Execute: `pip install -r requirements.txt`
-6. Execute: `pip install -r requirements.test.txt`
-7. Execute: `pytest --log-cli-level=INFO`
+5. Execute: `pip install -e ".[test]"`
+6. Execute: `pytest --log-cli-level=INFO`
 
 ## Security Audit
 
@@ -104,8 +107,8 @@ Before shipping a build, check your dependencies for known vulnerabilities using
 
 1. Go to the repository folder
 2. Activate your virtual environment
-3. Execute: `pip install -r requirements.dev.txt`
-4. Execute: `pip-audit -r requirements.txt`
+3. Execute: `pip install -e ".[dev]"`
+4. Execute: `pip-audit`
 
 ## Build
 
@@ -119,7 +122,7 @@ Once tests pass and dependencies are clean, you can generate a standalone execut
 
 1. Go to the repository folder
 2. Activate your virtual environment: `venv\Scripts\activate`
-3. Install build dependencies: `pip install -r requirements.build.txt`
+3. Install build dependencies: `pip install -e ".[build]"`
 4. Create the executable: `pyinstaller app.spec`
 
 Alternatively, you can run the helper script: `build.bat`
@@ -128,7 +131,7 @@ Alternatively, you can run the helper script: `build.bat`
 
 1. Go to the repository folder
 2. Activate your virtual environment: `source venv/bin/activate`
-3. Install build dependencies: `pip install -r requirements.build.txt`
+3. Install build dependencies: `pip install -e ".[build]"`
 4. Create the executable: `pyinstaller app.spec`
 
 Alternatively, you can run the helper script: `./build.sh`
