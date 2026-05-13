@@ -1,9 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 # WARNING: This spec bundles the repo-level .env into the executable.
-# For production builds, replace .env with a dedicated file that contains
-# only production values — never commit real secrets to the repo-level .env.
-# Recommended: create a separate .env.prod, copy it to .env before running
-# PyInstaller, then delete it from the repo root afterwards.
+# For production builds, set production values directly in .env —
+# never commit real secrets to the repo.
 
 import os
 

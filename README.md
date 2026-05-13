@@ -114,9 +114,8 @@ Before shipping a build, check your dependencies for known vulnerabilities using
 
 Once tests pass and dependencies are clean, you can generate a standalone executable (`.exe` on Windows, or binary on Linux/Mac) using **PyInstaller**.
 
-> **Important:** The build bundles the repo-level `.env` file into the executable. For production builds,
-> never put real secrets in the repo-level `.env`. Create a separate `.env.prod`, copy it to `.env` right
-> before running PyInstaller, then remove it from the repo root afterwards.
+> **Important:** The build bundles the repo-level `.env` into the executable. For production builds,
+> set production values directly in `.env` — never commit real secrets to the repo.
 
 ### Windows
 
