@@ -27,13 +27,13 @@ Folia can also be packaged into a fully standalone executable using PyInstaller,
 
 Dependencies are declared in `pyproject.toml`. The `requirements*.txt` files are thin wrappers that delegate to it.
 
-#### Runtime (`requirements.txt` → `-e .`)
+#### Runtime (`[project.dependencies]`)
 
 ```
 python-dotenv==1.0.1
 ```
 
-#### Dev (`requirements.dev.txt` → `-e .[dev]`)
+#### Dev (`[project.optional-dependencies]` dev)
 
 ```
 pre-commit==4.3.0
@@ -41,7 +41,7 @@ pip-audit==2.7.3
 ruff==0.11.12
 ```
 
-#### Test (`requirements.test.txt` → `-e .[test]`)
+#### Test (`[project.optional-dependencies]` test)
 
 ```
 pytest==8.4.2
@@ -51,7 +51,7 @@ pytest-timeout==2.3.1
 pytest-xdist==3.5.0
 ```
 
-#### Build (`requirements.build.txt` → `-e .[build]`)
+#### Build (`[project.optional-dependencies]` build)
 
 ```
 pyinstaller==6.16.0
