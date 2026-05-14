@@ -68,9 +68,9 @@ With the dependencies listed above in mind, follow these steps to run the projec
 5. Execute: `pip install -e ".[dev,test]"`
 
    Alternatively, you can install each group separately:
-   - `pip install -r requirements.txt` — runtime only
-   - `pip install -r requirements.dev.txt` — adds dev tools
-   - `pip install -r requirements.test.txt` — adds test tools
+   - `pip install -e "."` — runtime only
+   - `pip install -e ".[dev]"` — adds dev tools
+   - `pip install -e ".[test]"` — adds test tools
 
 6. Copy `.env.example.dev` to `.env` so the app can load its environment configuration
 7. Use `python app.py` or `python -m src` to execute the program
