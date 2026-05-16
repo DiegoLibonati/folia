@@ -1,6 +1,5 @@
 from tkinter import Entry, Frame, Label, Misc, StringVar
 from tkinter.ttk import Combobox
-from typing import Any
 
 from src.ui.styles import Styles
 
@@ -10,7 +9,7 @@ class FontConfigForm(Frame):
         self,
         parent: Misc,
         styles: Styles,
-        font_families: list[tuple[str, Any]],
+        font_families: list[str],
         entry_number: StringVar,
     ) -> None:
         super().__init__(parent)

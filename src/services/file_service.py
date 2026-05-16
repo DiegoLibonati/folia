@@ -19,7 +19,7 @@ class FileService:
     @staticmethod
     def save_file(content: str) -> None:
         files = [("Text Document", "*.txt")]
-        file = filedialog.asksaveasfile(mode="w", filetypes=files, defaultextension=files)
+        file = filedialog.asksaveasfile(mode="w", filetypes=files, defaultextension=".txt")
         if file:
             file.write(content)
             file.close()

@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from tkinter import Button, StringVar, Tk, Toplevel, font
 
 from src.constants.paths import PATH_ICON
@@ -6,7 +7,7 @@ from src.ui.styles import Styles
 
 
 class FontConfigView(Toplevel):
-    def __init__(self, root: Tk, styles: Styles, on_save: callable) -> None:
+    def __init__(self, root: Tk, styles: Styles, on_save: Callable[[str, str], None]) -> None:
         super().__init__(root)
         self._styles = styles
         self._on_save = on_save

@@ -56,8 +56,8 @@ class InterfaceApp:
             raise ValidationDialogError(message=MESSAGE_NOT_VALID_FIELDS)
 
         try:
-            new_size = int(new_size)
+            parsed_size = int(new_size)
         except Exception:
             raise ValidationDialogError(message=MESSAGE_NOT_VALID_FIELD_NUM)
 
-        self._main_view.set_font(new_font, new_size)
+        self._main_view.set_font(new_font, parsed_size)

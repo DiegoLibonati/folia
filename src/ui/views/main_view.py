@@ -1,4 +1,5 @@
-from tkinter import Frame, Menu, Misc, Scrollbar, Text
+from collections.abc import Callable
+from tkinter import Frame, Menu, Scrollbar, Text, Tk
 
 from src.ui.styles import Styles
 
@@ -6,14 +7,15 @@ from src.ui.styles import Styles
 class MainView(Frame):
     def __init__(
         self,
-        root: Misc,
+        root: Tk,
         styles: Styles,
-        on_open: callable,
-        on_save: callable,
-        on_delete: callable,
-        on_change_font: callable,
+        on_open: Callable[[], None],
+        on_save: Callable[[], None],
+        on_delete: Callable[[], None],
+        on_change_font: Callable[[], None],
     ) -> None:
         super().__init__(root)
+        self._root = root
         self._styles = styles
         self._on_open = on_open
         self._on_save = on_save
@@ -30,13 +32,13 @@ class MainView(Frame):
         self._scrollbar_vertical = Scrollbar(master=self)
         self._scrollbar_vertical.grid(row=0, column=1, sticky="ns")
 
-        self._scrollbar_horizontal = Scrollbar(master=self, orient=self._styles.ORIENT_HORIZONTAL)
+        self._scrollbar_horizontal = Scrollbar(master=self, orient="horizontal")
         self._scrollbar_horizontal.grid(row=1, column=0, sticky="ew")
 
         self._text_entry = Text(
             master=self,
             font=self._styles.FONT_ARIAL_10,
-            wrap=self._styles.WRAP_NONE,
+            wrap="none",
             padx=5,
             pady=5,
             yscrollcommand=self._scrollbar_vertical.set,
@@ -48,8 +50,8 @@ class MainView(Frame):
         self._scrollbar_horizontal.config(command=self._text_entry.xview)
 
     def _create_menu(self) -> None:
-        menu_bar = Menu(master=self.master)
-        self.master.config(menu=menu_bar)
+        menu_bar = Menu(master=self._root)
+        self._root.configure(menu=menu_bar)
 
         file_drop_down = Menu(master=menu_bar, tearoff=0)
         config_drop_down = Menu(master=menu_bar, tearoff=0)
